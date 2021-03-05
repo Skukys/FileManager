@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>FileManager</title>
+</head>
+<body>
+<div id="app">
+    <header class="header">
+        <div class="header__container flex">
+            <div class="header__logo" @click="setPage('home')">FileManager</div>
+            <nav class="header__nav flex">
+                <a @click="setPage('login')" style="cursor: pointer;">Login</a>
+                <a @click="setPage('create')" v-if="admin" style="cursor: pointer;">Control user</a>
+                <a @click="logout" v-if="auth" style="cursor: pointer;">Logout</a>
+            </nav>
+        </div>
+    </header>
+    <login v-if="page === 'login'"></login>
+    <create-user v-if="page === 'create'"></create-user>
+    <div class="main flex" v-if="page === 'home'">
+        <div class="files flex">
+            <div class="files__control flex">
+                <a class="btn" @click="createFolderData.open = true">Create folder</a>
+                <a class="btn" id="addFileBtn" @click="loadFile">Add File</a>
+                <input type="file" id="addFile" style="display: none;">
+            </div>
+            <div class="files__content flex">
+                <div class="files__tree flex">
+                    <ul class="files__place flex">
+                        <folder
+                           :tree="treeData"
+                        ></folder>
+                    </ul>
+                </div>
+                <div class="files__data">
+                    <div class="files__data-header">{{opFolder.name}}</div>
+                    <div class="files__wrapper">
+                        <div class="file flex" v-for="files in opFolder.files">
+                            <img src="assets/img/logo.jpg" class="file__image"/>
+                            <div class="file__name">{{files.name}}.{{files.type}}</div>
+                        </div>
+                        <div class="file flex" v-for="folder in opFolder.folders">
+                            <img src="assets/img/folder.png" class="file__image"/>
+                            <div class="file__name" @dblclick="getFolder(folder.id)">{{folder.name}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="file-create flex" v-if="createFolderData.open">
+        <div class="file-create__bg" @click="createFolderData.open = false"></div>
+        <div class="file-create__content flex">
+            <input type="text" placeholder="Name folder" v-model="createFolderData.name">
+            <a class="btn" @click="createFolder()">Create</a>
+        </div>
+    </div>
+</div>
+<script src="assets/js/vue.min.js"></script>
+<script src="assets/js/scripts.js"></script>
+<script src="assets/js/index.js" type="module"></script>
+</body>
+</html>
